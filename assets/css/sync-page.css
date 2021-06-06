@@ -1,0 +1,125 @@
+.sync-page {
+  background-color: white !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 550px;
+}
+
+.sync-page .main-content .mdc-card {
+  background-color: #ebeff1 !important;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+  padding: 0.5rem !important;
+}
+
+.one-line {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 15px;
+}
+
+.two-lines-card {
+  padding: 0.3rem 0.5rem !important;
+}
+
+.card-secondary-text {
+  font-size: 0.875rem;
+  line-height: normal;
+  letter-spacing: 0.0178571429em;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mdc-button--unelevated:not(:disabled) {
+  background-color: #2295f3 !important;
+  color: white !important;
+  font-weight: 500 !important;
+  border-radius: 20px !important;
+  font-size: 0.8rem !important;
+  padding: 0 12px !important;
+}
+
+.mdc-list-item__graphic {
+  margin-right: 24px;
+}
+
+.icon-block,
+.icon-block * {
+  transition: background-color 0.2s;
+  -webkit-transition: background-color 0.2s;
+}
+
+.icon-block {
+  border-radius: 10px;
+  min-width: 110px;
+  padding: 16px 8px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: column;
+  -ms-flex-flow: column;
+  flex-flow: column;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: inherit;
+  cursor: pointer;
+}
+
+.icon-block:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.icon-circle {
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  background-color: #212121;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  background-color: rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-circle .mdi {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+}
+
+.icon-danger:hover .icon-circle {
+  background-color: #ffe9eb;
+  color: #dc3545;
+}
+
+.icon-danger:hover .icon-text {
+  color: #dc3545;
+}
+
+.icon-text {
+  font-size: 14px;
+  text-align: center;
+  overflow: hidden;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mdc-top-app-bar {
+  padding: 10px 20px;
+  position: relative !important;
+}

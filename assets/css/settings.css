@@ -1,0 +1,25 @@
+.sync-page .mdc-dialog .settings-dialog {
+  width: 100vw;
+  height: 100vh;
+  max-width: unset !important;
+  max-height: unset !important;
+  background: #fafcfe !important;
+  border-radius: 0 !important;
+  padding: 1.6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-dialog .mdc-list:not(.mdc-list--non-interactive) .mdc-list-item {
+  color: #000;
+  font-weight: 500;
+}
+
+.settings-dialog .mdc-list--avatar-list {
+  margin-right: 18px;
+}
+
+.settings-dialog .version {
+  font-weight: 500;
+}

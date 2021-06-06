@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:site_name" content="The Orange Alliance" />
+    <meta property="og:title" content="Log Reader" />
+    <title>DataSync Log Reader</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.2/jszip.min.js"
+      integrity="sha256-gy5W5/rXWluWXFRvMWFFMVhocfpBe7Tf4SW2WMfjs4E="
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+      }
+      body {
+        background-color: #000 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      input[type='file'] {
+        opacity: 0;
+        cursor: pointer;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      h3 {
+        font-family: 'Arial', sans-serif;
+        border-radius: 8px;
+        font-size: 22px !important;
+        background: #111;
+        border: 1px solid #333;
+        padding: 12px 24px;
+        color: #fff;
+      }
+    </style>
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet"><link href="/assets/css/material-components-web.min.css" rel="stylesheet"><link href="/assets/css/materialdesignicons.min.css" rel="stylesheet"></head>
+  <body>
+    <h3>Select a file</h3>
+    <input type="file" id="file" name="file" />
+
+    <script>
+      document.querySelector('#file').addEventListener('change', (evt) => {
+        const file = evt.target.files[0];
+        JSZip.loadAsync(file)
+          .then(async (zip) => {
+            console.clear();
+            let skErrors = 0;
+            let toaErrors = 0;
+            await zip
+              .file('local-storage.json')
+              .async('string')
+              .then((file) => {
+                const json = JSON.parse(file);
+                let newJson = {};
+                Object.keys(json).forEach((key) => {
+                  try {
+                    newJson[key] = JSON.parse(json[key]);
+                  } catch (e) {
+                    newJson[key] = json[key];
+                  }
+                });
+                console.log('localStorage', newJson);
+              });
+            const browser = await zip
+              .file('browser.json')
+              .async('string')
+              .then((file) => JSON.parse(file));
+            console.log('Browser', browser);
+            await zip
+              .file('console.txt')
+              .async('string')
+              .then((file) => {
+                for (const line of file.trim().split('\n')) {
+                  const parts = [];
+                  let isError = false;
+                  parts.push(new Date(line.substring(1, line.indexOf(']'))).toTimeString().split(' ')[0]);
+                  line
+                    .substr(line.indexOf(']') + 2)
+                    .split(', ')
+                    .forEach((part) => {
+                      if (part === 'SK-ERROR') {
+                        isError = true;
+                        return skErrors++;
+                      }
+                      if (part === 'TOA-ERROR') {
+                        isError = true;
+                        return toaErrors++;
+                      }
+                      try {
+                        parts.push(JSON.parse(part));
+                      } catch (e) {
+                        parts.push(isNaN(parseInt(part)) ? part : parseInt(part));
+                      }
+                    });
+                  if (isError) {
+                    console.error(...parts);
+                  } else {
+                    console.log(...parts);
+                  }
+                }
+              });
+
+            // Find issues
+            if (!browser.WebSocketSupport) console.warn('WebSocket is not supported by the browser.');
+            if (browser.onLine === undefined || browser.onLine === null) console.warn('navigator.onLine is undefined.');
+            if (browser.onLine === false) console.warn('No internet connection.');
+            if (skErrors > 0) console.warn(skErrors + ' requests to the scorekeeper failed.');
+            if (toaErrors > 0) console.warn(toaErrors + ' requests to TOA failed.');
+
+            alert('Parsing done, open the dev console.');
+          })
+          .catch((e) => {
+            alert('Error reading the file.');
+            console.log(e);
+          });
+      });
+    </script>
+  <script type="text/javascript" src="/assets/js/material-components-web.min.js"></script></body>
+</html>

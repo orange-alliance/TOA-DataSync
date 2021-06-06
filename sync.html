@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DataSync</title>
+    <link rel="shortcut icon" href="assets/imgs/favicon.png" />
+    <link href="/assets/css/sync-page.css" rel="stylesheet" />
+    <link href="/assets/css/styles.css" rel="stylesheet" />
+    <link href="/assets/css/settings.css" rel="stylesheet" />
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet"><link href="/assets/css/material-components-web.min.css" rel="stylesheet"><link href="/assets/css/materialdesignicons.min.css" rel="stylesheet"></head>
+  <body class="sync-page">
+    <header class="mdc-top-app-bar" id="status-header">
+      <div class="mdc-top-app-bar__row px-3">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <span class="mdc-top-app-bar__icon mdi" id="status-icon"></span>
+          <span class="mdc-top-app-bar__title" id="status-text">DataSync</span>
+        </section>
+      </div>
+      <p
+        class="px-3 mdc-typography--body2"
+        id="status-description"
+        style="color: var(--mdc-theme-on-primary, #000)"
+      ></p>
+    </header>
+    <div class="main-content p-4" id="content" hidden>
+      <div class="mdc-card mb-3" style="background: #ffe9eb !important" id="schedule-access" hidden>
+        <div style="padding: 0 16px">
+          <p class="mt-2 mb-0">Please allow access to the schedule</p>
+          <p class="mb-2 card-secondary-text">
+            To provide the best experience for your audience, allow us access to the schedule via unchecking "Keep
+            Schedule Private" in the
+            <a class="link" onclick="sync.openScorekeeperSchedule()">Scorekeeper schedule page</a>.
+          </p>
+        </div>
+      </div>
+
+      <div class="mdc-card mdc-list--non-interactive">
+        <div class="mdc-list-item">
+          <span class="mdc-list-item__graphic mdi mdi-calendar-text-outline"></span>
+          <span id="event-name" class="one-line"></span>
+          <button
+            class="mdc-list-item__meta mdc-button mdc-button--dense mdc-button--unelevated"
+            id="view-event"
+            tabindex="0"
+          >
+            View Event
+          </button>
+        </div>
+      </div>
+
+      <div class="mdc-card mdc-list--non-interactive mt-3">
+        <div class="mdc-list-item">
+          <span class="mdc-list-item__graphic mdi mdi-trophy-outline"></span>
+          <span>Upload Awards</span>
+          <button
+            class="mdc-list-item__meta mdc-button mdc-button--dense mdc-button--unelevated"
+            id="upload-awards"
+            tabindex="1"
+          >
+            Upload
+          </button>
+        </div>
+      </div>
+
+      <div class="mdc-card two-lines-card mdc-list--non-interactive mdc-list--two-line mt-3">
+        <div class="mdc-list-item">
+          <span class="mdc-list-item__graphic mdi mdi-link-variant"></span>
+          <span class="mdc-list-item__text">
+            <span class="mdc-list-item__primary-text" id="short-link"></span>
+            <span class="mdc-list-item__secondary-text">is your your short link</span>
+          </span>
+          <button
+            class="mdc-list-item__meta mdc-button mdc-button--dense mdc-button--unelevated"
+            id="copy-url"
+            tabindex="2"
+          >
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <div class="mdc-card mdc-list--non-interactive mt-3">
+        <div class="d-flex flex-row justify-content-center w-100">
+          <div class="icon-block" id="settings-btn" tabindex="3">
+            <div class="icon-circle">
+              <div class="mdi mdi-settings-outline"></div>
+            </div>
+            <div class="icon-text">Settings</div>
+          </div>
+          <div class="icon-block" id="streams-btn1" tabindex="4">
+            <div class="icon-circle">
+              <div class="mdi mdi-video-outline"></div>
+            </div>
+            <div class="icon-text">Streams</div>
+          </div>
+          <div class="icon-block icon-danger" id="stop-sync-btn" tabindex="5">
+            <div class="icon-circle">
+              <div class="mdi mdi-stop"></div>
+            </div>
+            <div class="icon-text">End event</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mdc-dialog" id="settings-dialog" data-mdc-auto-init="MDCDialog">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface settings-dialog mdc-dialog__content">
+          <div style="width: 100%; max-width: 500px">
+            <button class="mdc-fab mdc-fab--mini white-fab mb-4" data-mdc-dialog-action="no">
+              <span class="mdc-fab__icon mdi mdi-arrow-left"></span>
+            </button>
+            <div class="mdc-card">
+              <ul class="mdc-list">
+                <li class="mdc-list-item" id="streams-btn2">
+                  <span class="mdc-list--avatar-list mdi mdi-video-outline"></span>
+                  <span class="mdc-list-item__text">Streams</span>
+                </li>
+                <li class="mdc-list-item" id="purge-data-btn">
+                  <span class="mdc-list--avatar-list mdi mdi-trash-can-outline"></span>
+                  <span class="mdc-list-item__text">Purge Data</span>
+                </li>
+                <li class="mdc-list-item" id="save-logs-btn">
+                  <span class="mdc-list--avatar-list mdi mdi-file-document-outline"></span>
+                  <span class="mdc-list-item__text">Download logs</span>
+                </li>
+                <li class="mdc-list-item" id="logout-btn">
+                  <span class="mdc-list--avatar-list mdi mdi-logout"></span>
+                  <span class="mdc-list-item__text">Logout</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mdc-card mt-4">
+              <ul class="mdc-list mdc-list--non-interactive">
+                <li class="mdc-list-item">
+                  <span class="mdc-list-item__text"
+                    >DataSync Version: <span class="version" id="ds-version">0.5</span></span
+                  >
+                </li>
+                <li class="mdc-list-item">
+                  <span class="mdc-list-item__text">Scorekeeper: <span class="version" id="sk-version">0.5</span></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <div class="mdc-dialog" id="streams-dialog" data-mdc-auto-init="MDCDialog">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+          <h2 class="mdc-dialog__title">Streams</h2>
+          <div class="mdc-dialog__content">
+            <div id="streams-dialog-loading" class="pt-5 px-5 pb-4 justify-content-center" style="display: flex">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+            <div id="streams-dialog-content" hidden></div>
+          </div>
+          <footer class="mdc-dialog__actions flex-row">
+            <button type="button" class="mdc-button" id="delete-stream-btn" hidden>
+              <span class="mdc-button__label">Delete</span>
+            </button>
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+              <span class="mdc-button__label">Close</span>
+            </button>
+            <button type="button" class="mdc-button" id="add-stream-btn" onclick="sync.createStream(this)" hidden>
+              <span class="mdc-button__label">Add</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <div class="mdc-dialog" id="update-ip-dialog" data-mdc-auto-init="MDCDialog">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+          <h2 class="mdc-dialog__title">Change the Scorekeeper IP Address</h2>
+          <div class="mdc-dialog__content">
+            <div class="mdc-text-field w-100" data-mdc-auto-init="MDCTextField" id="ip-address">
+              <input class="mdc-text-field__input" value="localhost:80" />
+              <div class="mdc-line-ripple"></div>
+              <label class="mdc-floating-label">IP Address</label>
+            </div>
+          </div>
+          <footer class="mdc-dialog__actions flex-row">
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+              <span class="mdc-button__label">Close</span>
+            </button>
+            <button type="button" class="mdc-button" onclick="sync.updateIpAddress(this)">
+              <span class="mdc-button__label">Update</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <div class="mdc-dialog" id="confirmation-dialog" data-mdc-auto-init="MDCDialog">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+          <h2 class="mdc-dialog__title" id="confirmation-dialog-title"></h2>
+          <div class="mdc-dialog__content" id="confirmation-dialog-content"></div>
+          <footer class="mdc-dialog__actions">
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+              <span class="mdc-button__label">No</span>
+            </button>
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
+              <span class="mdc-button__label">Yes</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <div class="mdc-dialog" id="goodbye-dialog" data-mdc-auto-init="MDCDialog">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+          <div class="mdc-card__media"></div>
+          <div class="mdc-dialog__title text-center">Thanks for using the DataSync!</div>
+          <div class="mdc-dialog__content">
+            Thank you for helping us make data more accessible!<br />
+            We hope your event was successful.<br />
+            If you have any questions or comments about the DataSync, email <u>contact@theorangealliance.org</u>.
+            <br /><br />
+            See you at the next event,<br />
+            The Orange Alliance team❤️
+          </div>
+          <footer class="mdc-dialog__actions">
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
+              <span class="mdc-button__label">Close</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <div class="mdc-snackbar mdc-snackbar--leading">
+      <div class="mdc-snackbar__surface">
+        <div class="mdc-snackbar__label"></div>
+      </div>
+    </div>
+  <script type="text/javascript" src="/assets/js/material-components-web.min.js"></script><script type="text/javascript" src="./assets/js/index.bundle.js"></script><script type="text/javascript" src="./assets/js/sync.bundle.js"></script></body>
+</html>
